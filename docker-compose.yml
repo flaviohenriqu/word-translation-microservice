@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: word_service
+      POSTGRES_PASSWORD: word_service_password
+      POSTGRES_DB: word_service_db
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+      - 5678:5678
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://word_service:word_service_password@db:5432/word_service_db
+      - PYTHONPATH=.
