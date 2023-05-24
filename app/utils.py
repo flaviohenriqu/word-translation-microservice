@@ -24,12 +24,9 @@ async def get_translation_data(word: str, translated_language: str):
     """
     async with httpx.AsyncClient(cookies={"CONSENT": "YES+"}) as client:
         # Construct the URL for Google Translate
-        # base_url = "https://translate.googleapis.com/translate_a/single"
         base_url = "https://clients5.google.com/translate_a/single"
-        # base_url = "https://clients5.google.com/translate_a/"
-        # url = f"{base_url}?client=gtx&dt=t&sl=en&tl={translated_language}&q={word}"
         url = f"{base_url}?dj=1&dt=t&dt=sp&dt=ld&dt=bd&client=dict-chrome-ex&sl=auto&tl={translated_language}&q={word}"
-        # url = f"{base_url}t?client=dict-chrome-ex&sl=auto&tl={translated_language}&q={word}"
+
         try:
             # Send the HTTP request to Google Translate
             response = await client.get(url)
@@ -37,12 +34,9 @@ async def get_translation_data(word: str, translated_language: str):
 
             translation_data = response.json()
             src = translation_data["src"]
-            print("DICT " * 5)
-            print(translation_data["dict"])
             translation_data["src"] = translated_language
             translation_data["data"] = translation_data["dict"]
             del translation_data["dict"]
-            print(translation_data)
 
             return TranslationData(
                 word=word,

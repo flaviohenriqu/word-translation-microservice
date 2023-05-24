@@ -16,9 +16,6 @@ async def get_word(
     word_service: services.WordService = Depends(),
 ):
     result = await word_service.get_word(word, translated_language)
-    print("RESULT " * 5)
-    print(result)
-    print(type(result))
     if result is None:
         raise HTTPException(status_code=404, detail="Word not found")
     return result
